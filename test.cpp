@@ -21,12 +21,12 @@ double computeProbabilityOfCollisionNPositionsKDTree(Vector3 const& robot_positi
       Vector3 depth_position = closest_pts[i];
 
       // interpolate towards robot
-      double norm = (robot_position - depth_position).norm();
-      if (norm >= 2*interpolation_radius) {
-        depth_position = depth_position + (robot_position - depth_position)/norm*interpolation_radius;
-      } else {
-        depth_position = depth_position + (robot_position - depth_position)*0.5;
-      }
+      // double norm = (robot_position - depth_position).norm();
+      // if (norm >= 2*interpolation_radius) {
+      //   depth_position = depth_position + (robot_position - depth_position)/norm*interpolation_radius;
+      // } else {
+      //   depth_position = depth_position + (robot_position - depth_position)*0.5;
+      // }
 
       Vector3 sigma_robot_position_nn = sigma_robot_position*1.0;
       for (int i = 0; i <3; i++) {
@@ -77,9 +77,24 @@ void generateSamples() {
 	// interpolation_radius
 	double interpolation_radius = 0.3;
 
-	double probability = computeProbabilityOfCollisionNPositionsKDTree(robot_position, sigma_robot_position, closest_pts, interpolation_radius, 0);
+	for (int i = 0; i < 10; i++) {
+		robot_position = Vector3(-0.5 + i*0.1, 0.0, 3.0);
+		double probability = computeProbabilityOfCollisionNPositionsKDTree(robot_position, sigma_robot_position, closest_pts, interpolation_radius, 0);
+		std::cout << "robot_position: " << robot_position.transpose() << std::endl;
+		std::cout << "Probability: " << probability << std::endl;
+	}
 
-	std::cout << "Probability: " << probability << std::endl;
+	std::cout << std::endl;
+
+	sigma_robot_position = Vector3(1.0, 1.0, 1.0);
+
+	for (int i = 0; i < 10; i++) {
+		robot_position = Vector3(-0.5 + i*0.1, 0.0, 3.0);
+		double probability = computeProbabilityOfCollisionNPositionsKDTree(robot_position, sigma_robot_position, closest_pts, interpolation_radius, 0);
+		std::cout << "robot_position: " << robot_position.transpose() << std::endl;
+		std::cout << "Probability: " << probability << std::endl;
+	}
+
 
 }
 
